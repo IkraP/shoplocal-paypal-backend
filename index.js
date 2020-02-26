@@ -1,18 +1,18 @@
 const express = require("express");
-const ejs = require("ejs");
 const paypal = require("paypal-rest-sdk");
+const bodyParser = require("body-parser");
+const { client_id, client_secret } = require("./config");
 
 paypal.configure({
   mode: "sandbox", //sandbox or live
-  client_id:
-    "AXLAi1CN7F4kS_iPBGG2yEk7mdJP6U1cexZkdMX5nOLGQo9WueHfA86Gb3xVulTZ49rmVVq2UNsAxThw",
-  client_secret:
-    "EMWZFqM8QK9yLmOIUo7YEtF9X87ZkjhID7b0o4UT1twx7E0OWm4IiaLWnrhuckuP0cToW1ozk8nPhyYg"
+  client_id,
+  client_secret
 });
 
 const app = express();
 
-app.set("view engine", "ejs");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => res.render("index"));
 
@@ -33,7 +33,7 @@ app.post("/pay", (req, res) => {
             {
               name: "item",
               sku: "item",
-              price: "2.00",
+              price: "8.00",
               currency: "GBP",
               quantity: 1
             }
@@ -41,13 +41,12 @@ app.post("/pay", (req, res) => {
         },
         amount: {
           currency: "GBP",
-          total: "2.00"
+          total: "8.00"
         },
         description: "payment descriptions"
       }
     ]
   };
-
   paypal.payment.create(create_payment_json, function(error, payment) {
     if (error) {
       throw error;
@@ -71,7 +70,7 @@ app.get("/success", (req, res) => {
       {
         amount: {
           currency: "GBP",
-          total: "2.00"
+          total: "8.00"
         }
       }
     ]
