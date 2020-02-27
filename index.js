@@ -2,6 +2,7 @@ const express = require("express");
 const paypal = require("paypal-rest-sdk");
 const bodyParser = require("body-parser");
 const { client_id, client_secret } = require("./config");
+const engines = require("consolidate");
 
 paypal.configure({
   mode: "sandbox", //sandbox or live
@@ -14,9 +15,12 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.engine("ejs", engines.ejs);
+app.set("views", "./views");
+app.set("view engine", "ejs");
 app.get("/", (req, res) => res.render("index"));
 
-app.post("/pay", (req, res) => {
+app.get("/paypal", (req, res) => {
   const create_payment_json = {
     intent: "sale",
     payer: {
