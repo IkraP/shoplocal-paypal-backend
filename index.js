@@ -23,8 +23,8 @@ app.post("/pay", (req, res) => {
       payment_method: "paypal"
     },
     redirect_urls: {
-      return_url: "http://localhost:4000/success",
-      cancel_url: "http://localhost:4000/cancel"
+      return_url: "http://localhost:3000/success",
+      cancel_url: "http://localhost:3000/cancel"
     },
     transactions: [
       {
@@ -92,4 +92,4 @@ app.get("/success", (req, res) => {
 
 app.get("/cancel", (req, res) => res.send("Cancelled"));
 
-app.listen(4000, () => console.log("Server Started"));
+app.listen(3000, () => console.log("Server Started"));
